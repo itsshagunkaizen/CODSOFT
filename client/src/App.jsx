@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 
@@ -23,7 +23,7 @@ function App() {
         <Route path="/register" element={<Register />} />
 
         <Route path="/cart" element={<Cart />} />
-
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
 
     </BrowserRouter>

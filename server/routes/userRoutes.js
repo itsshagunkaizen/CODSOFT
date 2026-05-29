@@ -30,9 +30,11 @@ router.post("/register", async (req, res) => {
       password: hashedPassword,
     });
 
+    const { password: _password, ...userData } = user._doc;
+
     res.status(201).json({
       message: "User registered successfully",
-      user,
+      user: userData,
     });
 
   } catch (error) {
@@ -81,10 +83,12 @@ router.post("/login", async (req, res) => {
       }
     );
 
+    const { password: _password, ...userData } = user._doc;
+
     res.status(200).json({
       message: "Login successful",
       token,
-      user,
+      user: userData,
     });
 
   } catch (error) {

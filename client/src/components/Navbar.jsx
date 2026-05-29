@@ -1,16 +1,40 @@
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 function Navbar() {
 
-  const token = localStorage.getItem("token");
+  const [token, setToken] = useState(
+    localStorage.getItem("token")
+  );
+
+  const location = useLocation();
+
+  useEffect(() => {
+    setToken(localStorage.getItem("token"));
+
+    const handleStorage = () => {
+      setToken(localStorage.getItem("token"));
+    };
+
+    window.addEventListener(
+      "storage",
+      handleStorage
+    );
+
+    return () => {
+      window.removeEventListener(
+        "storage",
+        handleStorage
+      );
+    };
+  }, [location.pathname]);
 
   const handleLogout = () => {
 
     localStorage.removeItem("token");
+    setToken(null);
 
     alert("Logged out successfully");
-
-    window.location.reload();
   };
 
   return (

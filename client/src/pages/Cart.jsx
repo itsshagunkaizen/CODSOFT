@@ -19,11 +19,21 @@ function Cart() {
   );
 
   const handlePayment = async () => {
+    if (totalPrice <= 0) {
+      alert("Your cart total must be greater than zero.");
+      return;
+    }
+
+    if (!window.Razorpay) {
+      alert(
+        "Payment gateway failed to load. Please refresh the page and try again."
+      );
+      return;
+    }
 
     console.log("Checkout clicked");
 
     try {
-
       const { data } = await axios.post(
         "http://localhost:5000/api/payment/checkout",
         {
@@ -64,8 +74,12 @@ function Cart() {
       razor.open();
 
     } catch (error) {
+      console.error(error);
+      const message =
+        error?.response?.data?.message ||
+        "Unable to process payment. Please try again.";
 
-      console.log(error);
+      alert(message);
     }
   };
 

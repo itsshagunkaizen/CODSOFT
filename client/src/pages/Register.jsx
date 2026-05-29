@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function Register() {
+  const navigate = useNavigate();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -23,15 +25,18 @@ function Register() {
       );
 
       alert(response.data.message);
+      navigate("/login");
 
       setName("");
       setEmail("");
       setPassword("");
 
     } catch (error) {
+      const message =
+        error?.response?.data?.message ||
+        "Unable to register. Please try again.";
 
-      alert(error.response.data.message);
-
+      alert(message);
     }
   };
 

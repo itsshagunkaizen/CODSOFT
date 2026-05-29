@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function Login() {
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,11 +28,13 @@ function Login() {
       );
 
       alert(response.data.message);
-
+      navigate("/");
     } catch (error) {
+      const message =
+        error?.response?.data?.message ||
+        "Unable to login. Please try again.";
 
-      alert(error.response.data.message);
-
+      alert(message);
     }
   };
 

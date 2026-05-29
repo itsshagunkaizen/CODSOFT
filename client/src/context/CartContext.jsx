@@ -9,13 +9,18 @@ export const CartContext = createContext();
 function CartProvider({ children }) {
 
   const [cartItems, setCartItems] = useState(() => {
+    const savedCart = localStorage.getItem("cart");
 
-  const savedCart = localStorage.getItem("cart");
+    if (!savedCart) {
+      return [];
+    }
 
-  return savedCart
-    ? JSON.parse(savedCart)
-    : [];
-});
+    try {
+      return JSON.parse(savedCart);
+    } catch {
+      return [];
+    }
+  });
 
 useEffect(() => {
 

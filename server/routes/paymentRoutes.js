@@ -2,21 +2,36 @@ const express = require("express");
 
 const Razorpay = require("razorpay");
 
-console.log(process.env.RAZORPAY_KEY_ID);
-
 const router = express.Router();
 
+const razorpayKeyId = process.env.RAZORPAY_KEY_ID?.trim();
+const razorpaySecret = process.env.RAZORPAY_SECRET?.trim();
+
+if (!razorpayKeyId || !razorpaySecret) {
+  throw new Error(
+    "Razorpay API keys are not configured in .env"
+  );
+}
+
 const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_SECRET,
+  key_id: razorpayKeyId,
+  key_secret: razorpaySecret,
 });
 
 router.post("/checkout", async (req, res) => {
 
   try {
 
+    const amount = Number(req.body.amount);
+
+    if (!amount || amount <= 0) {
+      return res.status(400).json({
+        message: "Invalid payment amount",
+      });
+    }
+
     const options = {
-      amount: req.body.amount * 100,
+      amount: Math.round(amount * 100),
       currency: "INR",
     };
 
